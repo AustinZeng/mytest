@@ -4,12 +4,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -40,19 +40,15 @@ public class HttpClientUtils {
         // 创建httpClient对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
-        // 创建访问的地址
-        URIBuilder uriBuilder = new URIBuilder(url);
-      
-
         // 创建http对象
-        HttpGet httpGet = new HttpGet(uriBuilder.build());
+        HttpGet httpGet = new HttpGet(url);
         /**
          * setConnectTimeout：设置连接超时时间，单位毫秒。
          * setConnectionRequestTimeout：设置从connect Manager(连接池)获取Connection
          * 超时时间，单位毫秒。这个属性是新加的属性，因为目前版本是可以共享连接池的。
          * setSocketTimeout：请求获取数据的超时时间(即响应时间)，单位毫秒。 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用。
          */
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
+        RequestConfig requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
         httpGet.setConfig(requestConfig);
         
         httpGet.setHeader("Content-Type", "application/json");
@@ -89,6 +85,10 @@ public class HttpClientUtils {
 		 	
 		 	//第二步：创建httpPost对象
 	        HttpPost httpPost = new HttpPost(url);
+	        
+	        RequestConfig requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
+	        httpPost.setConfig(requestConfig);
+	        
 	        
 	        //第三步：给httpPost设置JSON格式的参数
 	        StringEntity requestEntity = new StringEntity(json,"utf-8");
