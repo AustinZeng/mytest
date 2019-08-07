@@ -11,6 +11,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.management.RuntimeErrorException;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class CoinBaseTest {
 	
 	static String apiKey = "xxxxx";
 	
-	static String secretKey="xxxxx";
+	static String secretKey="xxxxxxxx";
 	
 	
 	private String url;
@@ -51,9 +52,55 @@ public class CoinBaseTest {
 		 
 		if(jsonParam.size()>0){
 			body=jsonParam.toString();
-		}
-		
+		}	
 	}
+	
+	
+	@Test
+	public void accounts(){
+		
+        url="/v2/accounts/c130ebdd-c7fe-5df2-b302-a6d03f35c9a7";
+		
+		method="GET";
+		
+		 JSONObject jsonParam = new JSONObject();
+		 
+		if(jsonParam.size()>0){
+			body=jsonParam.toString();
+		}	
+	}
+	
+	
+	
+	@Test
+	public void addresses(){
+		
+        url="/v2/accounts/c130ebdd-c7fe-5df2-b302-a6d03f35c9a7/addresses";
+		
+		method="GET";
+		
+		 JSONObject jsonParam = new JSONObject();
+		 
+		if(jsonParam.size()>0){
+			body=jsonParam.toString();
+		}	
+	}
+	
+	
+	@Test
+	public void createaddresses(){
+		
+        url="/v2/accounts/c130ebdd-c7fe-5df2-b302-a6d03f35c9a7/addresses";
+		
+		method="POST";
+		
+		 JSONObject jsonParam = new JSONObject();
+		 jsonParam.put("name","New receive address");
+		if(jsonParam.size()>0){
+			body=jsonParam.toString();
+		}	
+	}
+	
 	
 	
 	@After
@@ -67,9 +114,13 @@ public class CoinBaseTest {
         headers.put("CB-ACCESS-SIGN", HMACSHA256(url, method, body, timestamp));
         headers.put("CB-ACCESS-TIMESTAMP", timestamp);
         headers.put("CB-VERSION", "2019-06-15");
+        String result =null;
         
-		String result = HttpClientUtils.doGet(baseUrl+url, headers);
-		
+        if(StringUtils.equals(method, "GET"))
+		    result = HttpClientUtils.doGet(baseUrl+url, headers);
+        else
+        	result = HttpClientUtils.doPost(baseUrl+url, headers,body);
+        
 		System.out.println(result);
 	}
 	
@@ -104,9 +155,5 @@ public class CoinBaseTest {
 	           
 	            throw new RuntimeErrorException(new Error("Cannot set up authentication headers."));
 	       }
-	    	
-
-	       
-
 	    }
 }

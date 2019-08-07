@@ -7,8 +7,10 @@ import java.util.Set;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -75,6 +77,52 @@ public class HttpClientUtils {
             }
         }
     }
+    
+    
+    
+    public static String doPost(String url,Map<String, String> headers, String json) throws Exception {
+		
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+	
+			//第一步：创建HttpClient对象
+		 httpClient = HttpClients.createDefault();
+		 	
+		 	//第二步：创建httpPost对象
+	        HttpPost httpPost = new HttpPost(url);
+	        
+	        //第三步：给httpPost设置JSON格式的参数
+	        StringEntity requestEntity = new StringEntity(json,"utf-8");
+	        requestEntity.setContentEncoding("UTF-8"); 
+	        
+	        // 设置请求头
+	        packageHeader(headers, httpPost);
+	        
+	        httpPost.setHeader("Content-type", "application/json");
+	        httpPost.setEntity(requestEntity);
+	       
+	        
+	        // 创建httpResponse对象
+	        CloseableHttpResponse httpResponse = null;
+	        
+	       //第四步：发送HttpPost请求，获取返回值
+	      
+	       try {
+	            // 执行请求并获得响应结果
+	            return getHttpClientResult(httpResponse, httpClient, httpPost);
+	        } finally {
+	            // 释放资源
+	        	  // 释放资源
+	            if (httpResponse != null) {
+	                httpResponse.close();
+	            }
+	            if (httpClient != null) {
+	                httpClient.close();
+	            }
+	        }
+	       
+	}
+
+	
     
     /**
      * Description: 封装请求头
