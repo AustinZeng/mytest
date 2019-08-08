@@ -24,9 +24,9 @@ public class CoinBaseTest {
 
 	static String baseUrl = "https://api.coinbase.com";
 	
-	static String apiKey = "xxxxx";
+	static String apiKey = "xxxxxx";
 	
-	static String secretKey="xxxxxxxx";
+	static String secretKey="xxxxxxxxxxxx";
 	
 	
 	private String url;
@@ -59,7 +59,7 @@ public class CoinBaseTest {
 	@Test
 	public void accounts(){
 		
-        url="/v2/accounts/c130ebdd-c7fe-5df2-b302-a6d03f35c9a7";
+        url="/v2/accounts/94282c88-9a86-56f0-bbed-4b91531416ff";
 		
 		method="GET";
 		
@@ -75,7 +75,23 @@ public class CoinBaseTest {
 	@Test
 	public void addresses(){
 		
-        url="/v2/accounts/c130ebdd-c7fe-5df2-b302-a6d03f35c9a7/addresses";
+        url="/v2/accounts/94282c88-9a86-56f0-bbed-4b91531416ff/addresses";
+		
+		method="GET";
+		
+		 JSONObject jsonParam = new JSONObject();
+		 
+		if(jsonParam.size()>0){
+			body=jsonParam.toString();
+		}	
+	}
+	
+	
+	
+	@Test
+	public void transactions(){
+		
+        url="/v2/accounts/94282c88-9a86-56f0-bbed-4b91531416ff/transactions";
 		
 		method="GET";
 		
